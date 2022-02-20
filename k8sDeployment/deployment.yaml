@@ -1,0 +1,35 @@
+kind: Deployment
+metadata:
+  name:  myapp-nginx
+  namespace: default
+  labels:
+    app:  myapp-nginx
+spec:
+  selector:
+    matchLabels:
+      app: myapp-nginx
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: myapp-nginx
+    spec:
+      containers:
+      - name:  myapp-nginx
+        image:  nginx
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        envFrom:
+        - configMapRef: 
+            name: myapp-configmap
+        ports:
+        - containerPort: 80
+          
+
+
+        
