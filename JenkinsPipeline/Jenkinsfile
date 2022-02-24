@@ -31,7 +31,7 @@ pipeline{
                 }
             }
             steps {
-                echo "You need to get your manager's conformation"
+                echo "You need to get your manager's confirmation"
             }
            
         }
