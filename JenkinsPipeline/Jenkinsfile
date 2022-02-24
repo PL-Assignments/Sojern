@@ -1,8 +1,8 @@
-properties([parameters([[$class: 'ChoiceParameter', choiceType: 'PT_SINGLE_SELECT', filterLength: 1, filterable: false, name: 'RUNNING_ENVIRONMENT', randomName: 'choice-parameter-97273372558868', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: ''], script: [classpath: [], sandbox: false, script: '''return[
+properties([parameters([[$class: 'ChoiceParameter', choiceType: 'PT_SINGLE_SELECT', filterLength: 1, filterable: false, name: 'RUNNING_ENVIRONMENT', randomName: 'choice-parameter-101538410101427', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: ''], script: [classpath: [], sandbox: false, script: '''return[
 \'Development\',
 \'Staging\', 
 \'Live\'
-]''']]], [$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT', filterLength: 1, filterable: false, name: 'PROJECT', randomName: 'choice-parameter-97273375655194', referencedParameters: 'RUNNING_ENVIRONMENT', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: ''], script: [classpath: [], sandbox: false, script: '''if (RUNNING_ENVIRONMENT.equals("Development")){
+]''']]], [$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT', filterLength: 1, filterable: false, name: 'PROJECT', randomName: 'choice-parameter-101538413395231', referencedParameters: 'RUNNING_ENVIRONMENT', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: ''], script: [classpath: [], sandbox: false, script: '''if (RUNNING_ENVIRONMENT.equals("Development")){
     return["language1", "language2", "language3"]
 }
 else if(RUNNING_ENVIRONMENT.equals("Staging")){
@@ -10,13 +10,30 @@ else if(RUNNING_ENVIRONMENT.equals("Staging")){
 }
 else if(RUNNING_ENVIRONMENT.equals("Live")){
     return["languageP1", "languageP2", "languageP2", "languageP3"]
-}''']]]])])
+}''']]], [$class: 'DynamicReferenceParameter', choiceType: 'ET_ORDERED_LIST', name: 'PROJECT INFORMATION', omitValueField: false, randomName: 'choice-parameter-101538419526454', referencedParameters: 'RUNNING_ENVIRONMENT', script: [$class: 'GroovyScript', fallbackScript: [classpath: [], sandbox: false, script: ''], script: [classpath: [], sandbox: false, script: '''if (RUNNING_ENVIRONMENT.equals("Development")){
+                                                        return["Development:  language1", "Development: language2", "Development: language3"]
+                                                    }
+                                                    else if(RUNNING_ENVIRONMENT.equals("Staging")){
+                                                        return["Staging:  languageA", "Staging: languageB", "Staging: languageC"]
+                                                    }
+                                                    else if(RUNNING_ENVIRONMENT.equals("LIVE")){
+                                                        return["Live:  languageP1", "Live: languageP2", "Live: languageP2", "Live: languageP3"]}
+
+''']]]])])
 
 pipeline{
     agent any
     stages{
         stage('setup parameters') {
-            
+            when {
+                expression{
+                    RUNNING_ENVIRONMENT == 'Live' && PROJECT == 'languageP3'
+                }
+            }
+            steps {
+                echo "You need to get your manager's conformation"
+            }
+           
         }
     }
 }
